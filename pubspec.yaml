@@ -76,8 +76,9 @@ dependencies:
   flutter_native_splash: ^2.4.0
   flutter_launcher_icons: ^0.14.1
 
-  # Scanner / QR
-  mobile_scanner: ^6.0.2
+  # QR (only generation — the app never scans a code, it prints one for
+  # tables; mobile_scanner was an unused dependency pulling in Google ML
+  # Kit, which broke Apple Silicon iOS simulator builds)
   qr_flutter: ^4.1.0
 
   # Build-time codegen

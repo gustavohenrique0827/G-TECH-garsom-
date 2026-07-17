@@ -1,6 +1,9 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- Required in every build variant (not just debug/profile) — the app
+         talks to Supabase in release builds too. -->
+    <uses-permission android:name="android.permission.INTERNET"/>
     <application
-        android:label="app_garcom_flutter"
+        android:label="GTech Garçom"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity

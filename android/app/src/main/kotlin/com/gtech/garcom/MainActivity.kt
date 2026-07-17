@@ -1,4 +1,4 @@
-package com.example.app_garcom_flutter
+package com.gtech.garcom
 
 import io.flutter.embedding.android.FlutterActivity
 
