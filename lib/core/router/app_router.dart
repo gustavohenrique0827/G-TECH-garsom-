@@ -3,6 +3,10 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../features/admin/presentation/pages/admin_dashboard_page.dart';
+import '../../features/admin/presentation/pages/admin_menu_page.dart';
+import '../../features/admin/presentation/pages/admin_settings_page.dart';
+import '../../features/admin/presentation/pages/admin_tables_page.dart';
+import '../../features/admin/presentation/pages/admin_waiters_page.dart';
 import '../../features/auth/domain/entities/user_role.dart';
 import '../../features/auth/presentation/controllers/auth_controller.dart';
 import '../../features/auth/presentation/pages/login_page.dart';
@@ -88,6 +92,26 @@ final appRouterProvider = Provider<GoRouter>((ref) {
         name: 'admin-dashboard',
         builder: (_, _) => const AdminDashboardPage(),
       ),
+      GoRoute(
+        path: AppRoutes.adminTables,
+        name: 'admin-tables',
+        builder: (_, _) => const AdminTablesPage(),
+      ),
+      GoRoute(
+        path: AppRoutes.adminMenu,
+        name: 'admin-menu',
+        builder: (_, _) => const AdminMenuPage(),
+      ),
+      GoRoute(
+        path: AppRoutes.adminWaiters,
+        name: 'admin-waiters',
+        builder: (_, _) => const AdminWaitersPage(),
+      ),
+      GoRoute(
+        path: AppRoutes.adminSettings,
+        name: 'admin-settings',
+        builder: (_, _) => const AdminSettingsPage(),
+      ),
 
       // GTech master admin.
       GoRoute(
@@ -108,7 +132,14 @@ final appRouterProvider = Provider<GoRouter>((ref) {
       final authState = ref.read(authControllerProvider);
 
       if (authState.isLoading) {
-        return loc == AppRoutes.splash ? null : AppRoutes.splash;
+        // Park on splash while the session resolves, carrying the intended
+        // destination so a deep link (e.g. /admin/mesas pasted in the
+        // address bar) isn't lost to the post-login home redirect.
+        if (loc == AppRoutes.splash) return null;
+        return Uri(
+          path: AppRoutes.splash,
+          queryParameters: {'from': state.uri.toString()},
+        ).toString();
       }
 
       final user = authState.valueOrNull;
@@ -117,8 +148,13 @@ final appRouterProvider = Provider<GoRouter>((ref) {
         return loc == AppRoutes.login ? null : AppRoutes.login;
       }
 
-      // Authenticated: bounce away from splash/login into the right shell.
+      // Authenticated: bounce away from splash/login into the right shell,
+      // restoring the parked deep link when there is one.
       if (loc == AppRoutes.splash || loc == AppRoutes.login) {
+        final from = state.uri.queryParameters['from'];
+        if (from != null && from.isNotEmpty && from != AppRoutes.splash) {
+          return from;
+        }
         return user.role.homePath;
       }
 

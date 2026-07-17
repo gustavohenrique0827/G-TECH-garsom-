@@ -9,3 +9,9 @@ final companyMenuProvider = FutureProvider.family<List<MenuCategory>, String>((
 ) {
   return ref.watch(menuRepositoryProvider).fetchMenu(companyId);
 });
+
+/// Admin view — includes unavailable items.
+final companyMenuAdminProvider =
+    FutureProvider.family<List<MenuCategory>, String>((ref, companyId) {
+      return ref.watch(menuRepositoryProvider).fetchMenuAdmin(companyId);
+    });

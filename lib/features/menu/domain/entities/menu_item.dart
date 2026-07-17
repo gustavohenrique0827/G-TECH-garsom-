@@ -11,6 +11,7 @@ class MenuItem with _$MenuItem {
     required String? description,
     required num price,
     required String? imageUrl,
+    @Default(true) bool isAvailable,
   }) = _MenuItem;
 
   const MenuItem._();
@@ -23,6 +24,7 @@ class MenuItem with _$MenuItem {
       description: row['description'] as String?,
       price: row['price'] as num,
       imageUrl: row['image_url'] as String?,
+      isAvailable: row['is_available'] as bool? ?? true,
     );
   }
 }
