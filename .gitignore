@@ -43,3 +43,12 @@ app.*.map.json
 /android/app/debug
 /android/app/profile
 /android/app/release
+
+# Local secrets (Supabase keys) — never commit
+config/env.local.json
+config/env.*.json
+!config/env.example.json
+
+# Generated code
+*.freezed.dart
+*.g.dart
